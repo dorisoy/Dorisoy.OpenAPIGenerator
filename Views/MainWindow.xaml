@@ -1,0 +1,129 @@
+﻿<Window x:Class="NSwagStudio.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:viewModels="clr-namespace:NSwagStudio.ViewModels"
+        xmlns:views="clr-namespace:NSwagStudio.Views"
+        xmlns:controls="clr-namespace:NSwagStudio.Controls"
+        Title="CRB.TPM.OpenAPIGenerator"
+        MinHeight="650" MinWidth="1000" UseLayoutRounding="True"
+        WindowStartupLocation="CenterScreen"
+        Height="650" Width="1000">
+
+    <Window.Resources>
+        <viewModels:MainWindowModel x:Key="ViewModel" />
+    </Window.Resources>
+
+    <Grid DataContext="{StaticResource ViewModel}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <!--菜单-->
+        <Menu>
+            <MenuItem Header="_文件">
+                <MenuItem Header="_新建" Command="{Binding CreateDocumentCommand}" InputGestureText="Ctrl-N" />
+                <MenuItem Header="_打开" Command="{Binding OpenDocumentCommand}" InputGestureText="Ctrl-O" />
+                <MenuItem Header="_关闭" InputGestureText="Ctrl-W"
+                          Command="{Binding CloseDocumentCommand}"
+                          CommandParameter="{Binding SelectedDocument}" />
+                <MenuItem Header="_关闭全部" InputGestureText="Ctrl+Shift-W"
+                          Command="{Binding CloseAllDocumentsCommand}"
+                          CommandParameter="{Binding Documents}" />
+                <MenuItem Header="_保存" InputGestureText="Ctrl-S"
+                          Command="{Binding SaveDocumentCommand}"
+                          CommandParameter="{Binding SelectedDocument}" />
+                <MenuItem Header="_保存全部" InputGestureText="Ctrl+Shift-S"
+                          Command="{Binding SaveAllDocumentsCommand}"
+                          CommandParameter="{Binding Documents}" />
+                <MenuItem Header="_保存到" Command="{Binding SaveAsDocumentCommand}" CommandParameter="{Binding SelectedDocument}" />
+            </MenuItem>
+        </Menu>
+
+        <TabControl Grid.Row="1" TabStripPlacement="Top" Margin="0,8,0,0">
+            <!-- Documents -->
+            <TabItem Header="工作台" HeaderTemplate="{StaticResource RotatedTabItem}">
+                <TabControl ItemsSource="{Binding Documents}" controls:TabContent.IsCached="True"
+                            SelectedItem="{Binding SelectedDocument, Mode=TwoWay}"
+                            Margin="8">
+                    <TabControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid ToolTip="{Binding Document.Path}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Text="{Binding Document.Name}" VerticalAlignment="Center" Margin="0,2,0,0">
+                                    <TextBlock.InputBindings>
+                                        <MouseBinding
+                                            CommandParameter="{Binding}"
+                                            Command="{Binding CloseDocumentCommand, Source={StaticResource ViewModel}}"
+                                            Gesture="MiddleClick" />
+                                    </TextBlock.InputBindings>
+                                </TextBlock>
+                                <Button Grid.Column="1"
+                                        Content="X" Padding="6,2,6,2" Margin="8,3,0,2"
+                                        CommandParameter="{Binding}"
+                                        Command="{Binding CloseDocumentCommand, Source={StaticResource ViewModel}}" />
+                            </Grid>
+                        </DataTemplate>
+                    </TabControl.ItemTemplate>
+                    <controls:TabContent.Template>
+                        <DataTemplate>
+                            <views:DocumentView Document="{Binding}" Margin="8" />
+                        </DataTemplate>
+                    </controls:TabContent.Template>
+                </TabControl>
+            </TabItem>
+            <!-- About -->
+            <TabItem Header="关于" HeaderTemplate="{StaticResource RotatedTabItem}">
+                <StackPanel Margin="8"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center">
+
+                    <Image Source="/Resources/ApplicationIcon.ico"
+                           Width="50"
+                           Height="50"
+                           HorizontalAlignment="Center" />
+
+                    <TextBlock Margin="0,0,0,10"
+                               FontSize="30"
+                               FontWeight="Bold"
+                               HorizontalAlignment="Center">
+                       CRB.TPM
+                    </TextBlock>
+                    <TextBlock Margin="0,0,0,10"
+                               FontSize="30"
+                               FontWeight="Bold"
+                               HorizontalAlignment="Center">
+                       OpenAPIGenerator v1.0.0.0
+                    </TextBlock>
+                    <!--<TextBlock Margin="0,0,0,8" FontSize="14" TextWrapping="Wrap">
+                        NSwag是一个用于.NET、TypeScript和其他平台的Swagger 2.0 API工具链，用C#编写。
+                        OpenAPI/Swagger规范使用JSON和JSON模式来描述RESTful web API。
+                        该项目提供了从这些Swagger自动生成客户端代码的工具并将这一代集成到现工作流中.
+                    </TextBlock>-->
+                    <TextBlock Margin="0,0,0,8"
+                               FontSize="14"
+                               HorizontalAlignment="Center">
+                        OpenAPIGenerator 由 <Hyperlink NavigateUri="http://www.dorisoy.com"
+                                                     Click="OnOpenHyperlink">Dorisoy</Hyperlink> 维护.
+                    </TextBlock>
+                    <TextBlock Margin="0,0,0,8"
+                               HorizontalAlignment="Center">
+                        NSwag 版本: <Run Text="{Binding NSwagVersion, Mode=OneWay}" />
+                    </TextBlock>
+                    <TextBlock Margin="0,0,0,8"
+                               HorizontalAlignment="Center">
+                        NJsonSchema 版本: <Run Text="{Binding NJsonSchemaVersion, Mode=OneWay}" />
+                    </TextBlock>
+                    <TextBlock Margin="0,0,0,8"
+                               HorizontalAlignment="Center">
+                        许可证: <Hyperlink NavigateUri="http://www.dorisoy.com" Click="OnOpenHyperlink">MIT</Hyperlink>
+                    </TextBlock>
+                </StackPanel>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>
+

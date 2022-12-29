@@ -1,0 +1,164 @@
+﻿<UserControl x:Class="NSwagStudio.Views.CodeGenerators.Views.CSharpSettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:converters="clr-namespace:MyToolkit.Converters;assembly=MyToolkit.Extended"
+             xmlns:localConverters="clr-namespace:NSwagStudio.Converters"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+
+    <UserControl.Resources>
+        <converters:VisibilityConverter x:Key="VisibilityConverter" />
+        <converters:NotConverter x:Key="NotConverter" />
+        <localConverters:StringArrayConverter x:Key="StringArrayConverter" />
+    </UserControl.Resources>
+
+    <GroupBox Header="DTO类" Margin="0,0,0,12">
+        <StackPanel Margin="4,8,4,-8">
+            <CheckBox IsChecked="{Binding Command.GenerateDtoTypes, Mode=TwoWay}" Margin="0,0,0,12">
+                <TextBlock Text="生成 DTO 类型 (例如:请求和响应类)" ToolTip="GenerateDtoTypes" TextWrapping="Wrap" />
+            </CheckBox>
+
+            <StackPanel Visibility="{Binding Command.GenerateDtoTypes, Converter={StaticResource VisibilityConverter}}">
+                <CheckBox IsChecked="{Binding Command.GenerateOptionalPropertiesAsNullable, Mode=TwoWay}" 
+                          ToolTip="GenerateOptionalPropertiesAsNullable" Margin="0,0,0,12">
+                    <TextBlock Text="将可选的架构属性（不需要）生成为可空属性" TextWrapping="Wrap" />
+                </CheckBox>
+
+                <CheckBox IsChecked="{Binding Command.GenerateNullableReferenceTypes, Mode=TwoWay}" 
+                          ToolTip="GenerateNullableReferenceTypes" Margin="0,0,0,12">
+                    <TextBlock Text="生成可空引用类型（NRT）注释（C#8）" TextWrapping="Wrap" />
+                </CheckBox>
+
+                <TextBlock Text="排除的类型名称（逗号分隔，必须在其他命名空间中定义）." FontWeight="Bold" Margin="0,0,0,6" />
+                <TextBox Text="{Binding Command.ExcludedTypeNames, Mode=TwoWay, Converter={StaticResource StringArrayConverter}, ConverterParameter=','}" 
+                         ToolTip="ExcludedTypeNames" Margin="0,0,0,12" />
+
+                <TextBlock Text="DTO 类型/枚举访问修饰符" FontWeight="Bold" Margin="0,0,0,6" />
+                <TextBox Text="{Binding Command.TypeAccessModifier, Mode=TwoWay}" 
+                         ToolTip="TypeAccessModifier" Margin="0,0,0,12" />
+
+                <CheckBox IsChecked="{Binding Command.GenerateDefaultValues, Mode=TwoWay}" 
+                          ToolTip="GenerateDefaultValues" Margin="0,0,0,12">
+                    <TextBlock Text="生成属性的默认值（如果指定了默认值）" TextWrapping="Wrap" />
+                </CheckBox>
+
+                <CheckBox IsChecked="{Binding Command.GenerateImmutableArrayProperties, Mode=TwoWay}" 
+                          ToolTip="GenerateImmutableArrayProperties" Margin="0,0,0,12">
+                    <TextBlock Text="删除不可为null的数组属性的setter" TextWrapping="Wrap" />
+                </CheckBox>
+
+                <CheckBox IsChecked="{Binding Command.GenerateImmutableDictionaryProperties, Mode=TwoWay}" 
+                          ToolTip="GenerateImmutableDictionaryProperties" Margin="0,0,0,12">
+                    <TextBlock Text="删除不可为null的字典属性的setter" TextWrapping="Wrap" />
+                </CheckBox>
+
+                <CheckBox IsChecked="{Binding Command.GenerateDataAnnotations, Mode=TwoWay}" 
+                          ToolTip="GenerateDataAnnotations" Margin="0,0,0,12">
+                    <TextBlock Text="生成数据注释属性" TextWrapping="Wrap" />
+                </CheckBox>
+
+                <CheckBox IsChecked="{Binding Command.GenerateJsonMethods, Mode=TwoWay}" 
+                          ToolTip="GenerateJsonMethods" Margin="0,0,0,12">
+                    <TextBlock Text="生成ToJson（）和FromJson（）方法" TextWrapping="Wrap" />
+                </CheckBox>
+
+                <CheckBox IsChecked="{Binding Command.EnforceFlagEnums, Mode=TwoWay}" 
+                          ToolTip="EnforceFlagEnums" Margin="0,0,0,12">
+                    <TextBlock Text="始终将枚举生成为bit标志位（具有[flags]属性）" TextWrapping="Wrap" />
+                </CheckBox>
+
+                <CheckBox IsChecked="{Binding Command.InlineNamedArrays, Mode=TwoWay}" 
+                          ToolTip="InlineNamedArrays" Margin="0,0,0,12">
+                    <TextBlock Text="内联命名Array数组" TextWrapping="Wrap" />
+                </CheckBox>
+
+                <CheckBox IsChecked="{Binding Command.InlineNamedDictionaries, Mode=TwoWay}" 
+                          ToolTip="InlineNamedDictionaries" Margin="0,0,0,12">
+                    <TextBlock Text="内联命名Dictionary字典" TextWrapping="Wrap" />
+                </CheckBox>
+
+                <CheckBox IsChecked="{Binding Command.InlineNamedTuples, Mode=TwoWay}" 
+                          ToolTip="InlineNamedTuples" Margin="0,0,0,12">
+                    <TextBlock Text="内联命名Tuples元组" TextWrapping="Wrap" />
+                </CheckBox>
+
+                <CheckBox IsChecked="{Binding Command.InlineNamedAny, Mode=TwoWay}" 
+                          ToolTip="InlineNamedAny" Margin="0,0,0,12">
+                    <TextBlock Text="内联命名的任何Schemas架构" TextWrapping="Wrap" />
+                </CheckBox>
+
+                <TextBlock Text="Class样式" FontWeight="Bold" Margin="0,0,0,6" />
+                <ComboBox SelectedItem="{Binding Command.ClassStyle, Mode=TwoWay}" 
+                          ToolTip="ClassStyle"
+                          ItemsSource="{Binding ClassStyles}" Margin="0,0,0,12" />
+
+                <GroupBox Header="序列化" Margin="0,0,0,12">
+                    <StackPanel Margin="4,8,4,-8">
+                        <TextBlock Text="JSON 类库 ('System.Text.Json' 是实验性/并不完整!)" FontWeight="Bold" Margin="0,0,0,6" />
+                        <ComboBox SelectedItem="{Binding Command.JsonLibrary, Mode=TwoWay}" 
+                                  ToolTip="JsonLibrary"
+                                  ItemsSource="{Binding JsonLibraries}" Margin="0,0,0,12" />
+                        
+                        <CheckBox IsChecked="{Binding Command.RequiredPropertiesMustBeDefined, Mode=TwoWay}" ToolTip="RequiredPropertiesMustBeDefined" Margin="0,0,0,12">
+                            <TextBlock Text="必须在JSON中定义必需的属性 (设置 Required.Always 当需要属性时总是如此)" TextWrapping="Wrap" />
+                        </CheckBox>
+
+                        <CheckBox IsChecked="{Binding Command.HandleReferences, Mode=TwoWay}"
+                                  Content="使用保留引用处理(All) 在 JSON 序列化中"
+                                  ToolTip="HandleReferences" Margin="0,0,0,12" />
+
+                        <TextBlock Text="自定义 Json.NET 转化类型 (可选, 多项换行)" FontWeight="Bold" Margin="0,0,0,6" />
+                        <TextBox Text="{Binding Command.JsonConverters, Mode=TwoWay, Converter={StaticResource StringArrayConverter}}" 
+                                 ToolTip="JsonConverters" Height="52" AcceptsReturn="True" 
+                                 VerticalScrollBarVisibility="Visible" Margin="0,0,0,12" />
+
+                        <TextBlock Text="JsonSerializerSettings 转换方法名称 (建议改用 GenerateUpdateJsonSerializerSettingsMethod 代替)" FontWeight="Bold"
+                                   Margin="0,0,0,6" />
+                        <TextBox Text="{Binding Command.JsonSerializerSettingsTransformationMethod, Mode=TwoWay}" 
+                                 ToolTip="JsonSerializerSettingsTransformationMethod"
+                                 Margin="0,0,0,12" />
+                    </StackPanel>
+                </GroupBox>
+
+                <GroupBox Header="基本数据类型" Margin="0,0,0,12">
+                    <StackPanel Margin="4,8,4,-8">
+                        <TextBlock Text="Any 类型" FontWeight="Bold" Margin="0,0,0,6" />
+                        <TextBox Text="{Binding Command.AnyType, Mode=TwoWay}" ToolTip="AnyType" Margin="0,0,0,12" />
+
+                        <TextBlock Text="Date 类型" FontWeight="Bold" Margin="0,0,0,6" />
+                        <TextBox Text="{Binding Command.DateType, Mode=TwoWay}" ToolTip="DateType" Margin="0,0,0,12" />
+
+                        <TextBlock Text="Date Time 类型" FontWeight="Bold" Margin="0,0,0,6" />
+                        <TextBox Text="{Binding Command.DateTimeType, Mode=TwoWay}" ToolTip="DateTimeType" Margin="0,0,0,12" />
+
+                        <TextBlock Text="Time 类型" FontWeight="Bold" Margin="0,0,0,6" />
+                        <TextBox Text="{Binding Command.TimeType, Mode=TwoWay}" ToolTip="TimeType" Margin="0,0,0,12" />
+
+                        <TextBlock Text="Time Span 类型" FontWeight="Bold" Margin="0,0,0,6" />
+                        <TextBox Text="{Binding Command.TimeSpanType, Mode=TwoWay}" ToolTip="TimeSpanType" Margin="0,0,0,12" />
+
+                        <TextBlock Text="Generic Array 类型" FontWeight="Bold" Margin="0,0,0,6" />
+                        <TextBox Text="{Binding Command.ArrayType, Mode=TwoWay}" ToolTip="ArrayType" Margin="0,0,0,12" />
+
+                        <TextBlock Text="Generic Array 实例类型 (empty = ArrayType)" FontWeight="Bold" Margin="0,0,0,6" />
+                        <TextBox Text="{Binding Command.ArrayInstanceType, Mode=TwoWay}" ToolTip="ArrayInstanceType" Margin="0,0,0,12" />
+
+                        <TextBlock Text="Generic Dictionary 类型" FontWeight="Bold" Margin="0,0,0,6" />
+                        <TextBox Text="{Binding Command.DictionaryType, Mode=TwoWay}" ToolTip="DictionaryType" Margin="0,0,0,12" />
+
+                        <TextBlock Text="Generic Dictionary 实例类型 (empty = DictionaryType)" FontWeight="Bold" Margin="0,0,0,6" />
+                        <TextBox Text="{Binding Command.DictionaryInstanceType, Mode=TwoWay}" ToolTip="DictionaryInstanceType" Margin="0,0,0,12" />
+
+                        <TextBlock Text="Generic Array 基类型" FontWeight="Bold" Margin="0,0,0,6" />
+                        <TextBox Text="{Binding Command.ArrayBaseType, Mode=TwoWay}" ToolTip="ArrayBaseType" Margin="0,0,0,12" />
+
+                        <TextBlock Text="Generic Dictionary 基类型" FontWeight="Bold" Margin="0,0,0,6" />
+                        <TextBox Text="{Binding Command.DictionaryBaseType, Mode=TwoWay}" ToolTip="DictionaryBaseType" Margin="0,0,0,12" />
+                    </StackPanel>
+                </GroupBox>
+            </StackPanel>
+        </StackPanel>
+    </GroupBox>
+</UserControl>

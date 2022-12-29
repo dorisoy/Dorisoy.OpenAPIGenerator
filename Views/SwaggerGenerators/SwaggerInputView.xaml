@@ -1,0 +1,125 @@
+﻿<UserControl x:Class="NSwagStudio.Views.SwaggerGenerators.SwaggerInputView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:swaggerGenerators1="clr-namespace:NSwagStudio.ViewModels.SwaggerGenerators"
+             xmlns:controls="clr-namespace:NSwagStudio.Controls"
+             mc:Ignorable="d"
+             d:DesignHeight="300"
+             d:DesignWidth="300">
+
+    <UserControl.Resources>
+        <swaggerGenerators1:SwaggerInputViewModel x:Key="ViewModel" />
+
+        <DataTemplate x:Key="CustomTab">
+            <!--<DataGrid ItemsSource="{Binding Entities}"
+                      x:Name="dataGrid">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Binding="{Binding Name}"
+                                        Header="Name"
+                                        Width="100" />
+                    <DataGridTemplateColumn Header="Position"
+                                            Width="150">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Position}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                        <DataGridTemplateColumn.CellEditingTemplate>
+                            <DataTemplate>
+                                <ComboBox SelectedItem="{Binding Position, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                          ItemsSource="{Binding Path=DataContext.Positions, ElementName=tabControl}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellEditingTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>-->
+            <DataGrid ItemsSource="{Binding Command.Selections, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                      AutoGenerateColumns="False"
+                      x:Name="dataGrid">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="路由"
+                                        Binding="{Binding Path}" />
+                    <DataGridTextColumn Header="Http谓词"
+                                        Binding="{Binding HttpMethod}" />
+                    <DataGridTextColumn Header="请求方法"
+                                        Binding="{Binding OperationName}" />
+                    <DataGridTemplateColumn Header="选择生成">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox IsChecked="{Binding IsChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                          HorizontalAlignment="Center" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </DataTemplate>
+
+    </UserControl.Resources>
+
+    <Grid Margin="8"
+          DataContext="{StaticResource ViewModel}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <StackPanel>
+            <TextBlock Text="指定URL:"
+                       FontWeight="Bold"
+                       Margin="0,0,0,4" />
+            <Grid Margin="0,0,0,8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBox VerticalContentAlignment="Center"
+                         Text="{Binding Command.Url, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <Button Content="创建本地副本"
+                        Command="{Binding LoadSwaggerUrlCommand}"
+                        CommandParameter="{Binding Command.Url}"
+                        Margin="4,0,0,0"
+                        Padding="8,4,8,4"
+                        Grid.Column="1" />
+            </Grid>
+            <!--<TextBlock Text="{Binding OperationDataCount}" />-->
+        </StackPanel>
+
+        <!--https://stackoverflow.com/questions/19876890/wpf-tabcontrol-and-datagrid-bugs-bugs-and-bugs-->
+        <TabControl Grid.Row="1">
+            <TabItem Header="指定 JSON/YAML (如果指定, 则URL 将忽略):">
+                <avalonedit:TextEditor Padding="8"
+                                       FontFamily="Consolas"
+                                       Background="GhostWhite"
+                                       ShowLineNumbers="True"
+                                       SyntaxHighlighting="JavaScript"
+                                       FontSize="10pt">
+                    <i:Interaction.Behaviors>
+                        <controls:AvalonEditBehavior Text="{Binding Command.Json, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    </i:Interaction.Behaviors>
+                </avalonedit:TextEditor>
+            </TabItem>
+            <TabItem Content="{Binding}"
+                     ContentTemplate="{StaticResource CustomTab}">
+                <TabItem.Header>
+                    <TextBlock Text="{Binding OperationDataCount,StringFormat='自定义({0})'}"></TextBlock>
+                    <!--<TextBlock>
+                        <TextBlock.Style>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="Text">
+                                    <Setter.Value>
+                                       自定义
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>-->
+                </TabItem.Header>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</UserControl>
