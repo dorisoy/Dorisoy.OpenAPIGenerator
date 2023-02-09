@@ -1,7 +1,8 @@
 # OpenAPIGenerator
-OpenAPIGenerator 基于 NSwagStudio 改写的WebAPI转 OpenAPI 的代理生成工具，按需自定义生成调用代理方法， NSwag是一个用于.NET、TypeScript和其他平台的Swagger 2.0 API工具链，用C#编写。其中OpenAPI/Swagger规范使用JSON和JSON模式来描述RESTful web API。该项目提供了从这些Swagger自动生成客户端代码的工具并将这一代集成到现工作流中.
 
 <img src="https://github.com/dorisoy/Dorisoy.OpenAPIGenerator/blob/main/Scn1.png?raw=true" />
+
+OpenAPIGenerator 是基于 NSwagStudio 改写的 WebAPI 转 OpenAPI 代理生成工具，按需自定义生成调用代理方法， NSwag是一个用于.NET、TypeScript和其他平台的Swagger 2.0 API工具链，用C#编写。其中OpenAPI/Swagger规范使用JSON和JSON模式来描述RESTful web API。该项目提供了从这些Swagger自动生成客户端代码的工具并将这一代集成到现工作流中.
 
 
 [![Security Status](https://www.murphysec.com/platform3/v3/badge/1618206364828991488.svg?t=1)](https://www.murphysec.com/accept?code=39db612557b2aff8391929e35a911977&type=1&from=2&t=2)
